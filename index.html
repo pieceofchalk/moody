@@ -58,11 +58,15 @@
         }
         .footer {
             display: flex;
+            bottom: calc(var(--lvh, 100vh) - var(--tg-viewport-height, 100vh));
+            position: fixed;
+            right: 0;
+            left: 0;
+            pointer-events: none;
             justify-content: space-around;
             padding: 10px;
             background-color: var(--tg-theme-bg-color, #fff);
             color: var(--tg-theme-text-color, #222);
-/*            background-color: var(--tg-theme-bg-color, #fff);*/
         }
         .tab {
             padding: 10px;
