@@ -10,135 +10,143 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
+            height: 100vh;
             display: flex;
             flex-direction: column;
-            height: 100vh;
+            transition: background-color 0.3s ease;
+            color: white;
         }
         .content {
             flex-grow: 1;
-            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+            text-align: center;
             padding: 20px;
         }
-        #greeting {
-            text-align: center;
-        }
         .mood {
-            font-size: 48px;
-            text-align: center;
-            margin: 20px 0;
-        }
-        #save-mood {
-            display: block;
-            margin: 0 auto;
-            padding: 10px 20px;
-            font-size: 16px;
+            font-size: 100px;
         }
         .nav-dots {
-            text-align: center;
-            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
         }
         .dot {
-            display: inline-block;
             width: 10px;
             height: 10px;
+            background-color: rgba(255, 255, 255, 0.5);
             border-radius: 50%;
-            background-color: #ccc;
             margin: 0 5px;
         }
         .dot.active {
-            background-color: #333;
+            background-color: white;
         }
-        #calendar-view {
-            display: none;
-        }
-        .calendar {
-            display: flex;
-            flex-direction: column-reverse;
-            overflow-y: auto;
-        }
-        .month {
-            margin-bottom: 20px;
-        }
-        .month-title {
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-        .days {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 5px;
-        }
-        .day {
-            text-align: center;
-            padding: 5px;
-            border: 1px solid #ccc;
+        .save-button {
+            background-color: white;
+            color: #333;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
         }
         .footer {
             display: flex;
             justify-content: space-around;
             padding: 10px;
-            background-color: #f0f0f0;
+            background-color: rgba(0, 0, 0, 0.1);
         }
         .tab {
-            padding: 10px 20px;
+            padding: 10px;
             cursor: pointer;
         }
         .tab.active {
-            background-color: #ddd;
+            border-bottom: 2px solid white;
+        }
+        .calendar {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            background-color: #4a4a4a;
+            overflow-y: auto;
+            height: calc(100vh - 50px); /* Adjust based on your footer height */
+        }
+        .month-container {
+            width: 100%;
+            padding: 10px;
+        }
+        .calendar-header {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            padding: 10px;
+            font-weight: bold;
+        }
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            width: 100%;
+        }
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
         }
     </style>
 </head>
 <body>
     <div id="mood-view" class="content">
-        <h2 id="greeting">HOW DID YOU FEEL TODAY?</h2>
-        <div id="mood" class="mood">😊</div>
-        <button id="save-mood">Save Mood</button>
-        <div class="nav-dots">
-            <span class="dot" onclick="changeMood(0)"></span>
-            <span class="dot" onclick="changeMood(1)"></span>
-            <span class="dot" onclick="changeMood(2)"></span>
-            <span class="dot" onclick="changeMood(3)"></span>
-            <span class="dot" onclick="changeMood(4)"></span>
-            <span class="dot" onclick="changeMood(5)"></span>
+        <div>
+            <div>👻</div>
+            <h2 id="greeting">HOW DO YOU FEEL TODAY, %username%?</h2>
         </div>
+        <div class="mood" id="mood">😊</div>
+        <button class="save-button" onclick="saveMood()">Save Mood</button>
+        <div class="nav-dots" id="nav-dots"></div>
     </div>
-    <div id="calendar-view" class="calendar"></div>
+    
+    <div id="calendar-view" class="calendar">
+        <!-- Calendar months will be dynamically inserted here -->
+    </div>
+
     <div class="footer">
         <div class="tab active" onclick="showView('mood-view')">Mood</div>
         <div class="tab" onclick="showView('calendar-view')">Calendar</div>
     </div>
 
     <script>
+        const moods = ['😊', '😃', '😐', '😕', '😢', '😡'];
+        const colors = ['#4CAF50', '#009688', '#3F51B5', '#9C27B0', '#E91E63', '#F44336'];
+        let currentMood = 0;
+        let moodData = {};
         const tg = window.Telegram.WebApp;
         tg.expand();
-
-        const moodEmojis = ['😢', '😞', '😐', '🙂', '😊', '😄'];
-        let currentMood = 4;
-
-        // Get username from Telegram
         const username = tg.initDataUnsafe.user ? tg.initDataUnsafe.user.first_name : 'User';
-        document.getElementById('greeting').textContent = `HOW DO YOU FEEL TODAY, ${username}?`;
 
-        function showView(viewId) {
-            document.getElementById('mood-view').style.display = viewId === 'mood-view' ? 'block' : 'none';
-            document.getElementById('calendar-view').style.display = viewId === 'calendar-view' ? 'block' : 'none';
-            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-            document.querySelector(`.tab[onclick="showView('${viewId}')"]`).classList.add('active');
+        function updateMood() {
+            document.body.style.backgroundColor = colors[currentMood];
+            document.getElementById('mood').textContent = moods[currentMood];
+            updateDots();
+        }
 
-            if (viewId === 'calendar-view') {
-                renderCalendar();
+        function updateDots() {
+            const dotsContainer = document.getElementById('nav-dots');
+            dotsContainer.innerHTML = '';
+            for (let i = 0; i < moods.length; i++) {
+                const dot = document.createElement('div');
+                dot.className = `dot ${i === currentMood ? 'active' : ''}`;
+                dotsContainer.appendChild(dot);
             }
         }
 
-        function changeMood(index) {
-            currentMood = index;
-            document.getElementById('mood').textContent = moodEmojis[index];
-            document.querySelectorAll('.dot').forEach((dot, i) => {
-                dot.classList.toggle('active', i === index);
-            });
-        }
-
-        document.getElementById('save-mood').addEventListener('click', () => {
+        function saveMood() {
+            // const today = new Date().toISOString().split('T')[0];
+            // moodData[today] = currentMood;
             const today = new Date().toISOString().split('T')[0];
             tg.CloudStorage.setItem(today, currentMood.toString(), function(err, saved) {
                 if (err) {
@@ -154,21 +162,19 @@
                     // DemoApp.updateCloudRows();
                     tg.showAlert('Mood saved successfully!');
                 }
-            });            
-        });
+            });
+            updateCalendar();
+        }
 
-        const cloudStorageKeys = {};
-        const cloudStorageItems = {};
+        function showView(viewId) {
+            document.getElementById('mood-view').style.display = viewId === 'mood-view' ? 'flex' : 'none';
+            document.getElementById('calendar-view').style.display = viewId === 'calendar-view' ? 'flex' : 'none';
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            if (viewId === 'calendar-view') updateCalendar();
+        }
 
-        function renderCalendar() {
-            const calendarView = document.getElementById('calendar-view');
-            calendarView.innerHTML = '';
-
-            const today = new Date();
-            const currentYear = today.getFullYear();
-            const currentMonth = today.getMonth();
-            
-
+        function reload_moodData(){
             tg.CloudStorage.getKeys(function(err, keys) {
                 if (err) {
                     tg.showAlert('Error: ' + err);
@@ -178,56 +184,104 @@
                             if (err) {
                                 tg.showAlert('Error: ' + err);
                             } else {
-                                cloudStorageKeys = keys;
-                                cloudStorageItems = {};
+                                moodData = {};
                                 for (let i = 0; i < keys.length; i++) {
                                     const key = keys[i];
-                                    cloudStorageItems[key] = values[key];
+                                    moodData[key] = values[key];
                                 }
                             }
                         });
                     }
                 }
             });
+        }
 
-            for (let i = 0; i <= currentMonth; i++) {
-                const monthElement = document.createElement('div');
-                monthElement.className = 'month';
+        function updateCalendar() {
+            reload_moodData()
+            const calendarView = document.getElementById('calendar-view');
+            calendarView.innerHTML = ''; // Clear previous calendar
 
-                const monthTitle = document.createElement('div');
-                monthTitle.className = 'month-title';
-                monthTitle.textContent = new Date(currentYear, i, 1).toLocaleString('default', { month: 'long' });
-                monthElement.appendChild(monthTitle);
+            const today = new Date();
+            const currentMonth = today.getMonth();
+            const currentYear = today.getFullYear();
 
-                const daysElement = document.createElement('div');
-                daysElement.className = 'days';
-
-                const daysInMonth = new Date(currentYear, i + 1, 0).getDate();
-                for (let day = 1; day <= daysInMonth; day++) {
-                    const dayElement = document.createElement('div');
-                    dayElement.className = 'day';
-                    dayElement.textContent = day;
-
-                    const date = new Date(currentYear, i, day);
-                    if (date <= today) {
-                        const dateString = date.toISOString().split('T')[0];
-                        const mood = cloudStorageItems[dateString];
-                        if (mood !== undefined) {
-                                    dayElement.textContent += ' ' + moodEmojis[parseInt(mood)];
-                        };
-                            
-                    }
-
-                    daysElement.appendChild(dayElement);
-                }
-
-                monthElement.appendChild(daysElement);
-                calendarView.appendChild(monthElement);
+            // Generate calendar for current month and next month
+            for (let i = 0; i < 2; i++) {
+                const monthDate = new Date(currentYear, currentMonth + i, 1);
+                const monthContainer = document.createElement('div');
+                monthContainer.className = 'month-container';
+                monthContainer.appendChild(generateMonthCalendar(monthDate));
+                calendarView.appendChild(monthContainer);
             }
         }
 
-        // Initialize the app
-        changeMood(currentMood);
+        function generateMonthCalendar(date) {
+            const year = date.getFullYear();
+            const month = date.getMonth();
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            const monthElement = document.createElement('div');
+            
+            const header = document.createElement('div');
+            header.className = 'calendar-header';
+            header.textContent = `${date.toLocaleString('default', { month: 'long' })} ${year}`;
+            monthElement.appendChild(header);
+
+            const calendarGrid = document.createElement('div');
+            calendarGrid.className = 'calendar-grid';
+
+            // Add empty cells for days before the first day of the month
+            for (let i = 0; i < firstDay; i++) {
+                calendarGrid.appendChild(document.createElement('div'));
+            }
+
+            // Add days of the month
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day';
+                dayElement.textContent = day;
+                
+                const date = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                if (moodData[date] !== undefined) {
+                    dayElement.style.backgroundColor = colors[moodData[date]];
+                }
+                
+                calendarGrid.appendChild(dayElement);
+            }
+
+            monthElement.appendChild(calendarGrid);
+            return monthElement;
+        }
+
+        document.addEventListener('touchstart', handleTouchStart, false);
+        document.addEventListener('touchmove', handleTouchMove, false);
+
+        let xDown = null;
+
+        function handleTouchStart(evt) {
+            xDown = evt.touches[0].clientX;
+        }
+
+        function handleTouchMove(evt) {
+            if (!xDown) return;
+            let xUp = evt.touches[0].clientX;
+            let xDiff = xDown - xUp;
+
+            if (xDiff > 0) {
+                // Swipe left
+                currentMood = (currentMood + 1) % moods.length;
+            } else {
+                // Swipe right
+                currentMood = (currentMood - 1 + moods.length) % moods.length;
+            }
+            updateMood();
+            xDown = null;
+        }
+
+        // Initialize
+        document.getElementById('greeting').textContent = `HOW DID YOU FEEL, ${username}?`;
+        updateMood();
     </script>
 </body>
 </html>
