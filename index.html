@@ -157,10 +157,16 @@
             });            
         });
 
-        var cloudStorageKeys = {};
-        var cloudStorageItems = {};
+        function renderCalendar() {
+            const calendarView = document.getElementById('calendar-view');
+            calendarView.innerHTML = '';
 
-        function loadCloudKeys() {
+            const today = new Date();
+            const currentYear = today.getFullYear();
+            const currentMonth = today.getMonth();
+            const cloudStorageKeys = {};
+            const cloudStorageItems = {};
+
             tg.CloudStorage.getKeys(function(err, keys) {
                 if (err) {
                     tg.showAlert('Error: ' + err);
@@ -181,17 +187,6 @@
                     }
                 }
             });
-        };
-
-        function renderCalendar() {
-            const calendarView = document.getElementById('calendar-view');
-            calendarView.innerHTML = '';
-
-            const today = new Date();
-            const currentYear = today.getFullYear();
-            const currentMonth = today.getMonth();
-
-            loadCloudKeys()
 
             for (let i = 0; i <= currentMonth; i++) {
                 const monthElement = document.createElement('div');
