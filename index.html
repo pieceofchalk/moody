@@ -117,7 +117,7 @@
 
         // Get username from Telegram
         const username = tg.initDataUnsafe.user ? tg.initDataUnsafe.user.first_name : 'User';
-        document.getElementById('greeting').textContent = `HOW DID YOU FEEL TODAY, ${username}?`;
+        document.getElementById('greeting').textContent = `HOW DO YOU FEEL TODAY, ${username}?`;
 
         function showView(viewId) {
             document.getElementById('mood-view').style.display = viewId === 'mood-view' ? 'block' : 'none';
@@ -157,6 +157,9 @@
             });            
         });
 
+        const cloudStorageKeys = {};
+        const cloudStorageItems = {};
+
         function renderCalendar() {
             const calendarView = document.getElementById('calendar-view');
             calendarView.innerHTML = '';
@@ -164,8 +167,7 @@
             const today = new Date();
             const currentYear = today.getFullYear();
             const currentMonth = today.getMonth();
-            const cloudStorageKeys = {};
-            const cloudStorageItems = {};
+            
 
             tg.CloudStorage.getKeys(function(err, keys) {
                 if (err) {
