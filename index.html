@@ -48,11 +48,11 @@
             cursor: pointer;
         }
         .arrow-left {
-            padding-right: 0.5em;
+            padding-right: 10px;
             left: 10px;
         }
         .arrow-right {
-            padding-left: 0.5em;
+            padding-left: 10px;
             right: 10px;
         }
         .nav-dots {
@@ -184,9 +184,9 @@
         const tg = window.Telegram.WebApp;
 
         function updateMainColor(color) {
-            document.body.style.backgroundColor = color;
             tg.setHeaderColor(color); 
             tg.setBackgroundColor(color);
+            document.body.style.backgroundColor = color;
         }
 
         
@@ -328,8 +328,8 @@
             return monthElement;
         }
 
-        document.addEventListener('touchstart', handleTouchStart, false);
-        document.addEventListener('touchmove', handleTouchMove, false);
+        document.getElementById('mood-view').addEventListener('touchstart', handleTouchStart, false);
+        document.getElementById('mood-view').addEventListener('touchmove', handleTouchMove, false);
 
         let xDown = null;
 
