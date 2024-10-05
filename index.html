@@ -188,10 +188,12 @@
         function updateMainColor(color) {
             tg.setHeaderColor(color); 
             tg.setBackgroundColor(color);
-            tg.setBottomBarColor(color);
-            // document.body.style.backgroundColor = color; //TODO: fix colors
+            // document.body.style.backgroundColor = color;
         }
 
+        
+        tg.expand();
+        tg.disableVerticalSwipes();
         const username = tg.initDataUnsafe.user ? tg.initDataUnsafe.user.first_name : 'User';
 
         function updateMood() {
@@ -217,12 +219,13 @@
 
         function saveMood() {
             // const today = new Date().toISOString().split('T')[0];
+            // moodData[today] = currentMood;
             const today = new Date().toISOString().split('T')[0];
             tg.CloudStorage.setItem(today, currentMood.toString(), function(err, saved) {
                 if (err) {
                     tg.showAlert('Error saving mood: ' + error);
                 } else {
-                    // console.log('Mood saved successfully!');
+                    console.log('Mood saved successfully!');
                     // if (saved) {
                     //     if (typeof DemoApp.cloudStorageItems[key] === 'undefined') {
                     //         DemoApp.cloudStorageKeys.push(key);
@@ -231,9 +234,10 @@
                     // }
                     // form.reset();
                     // DemoApp.updateCloudRows();
-                    tg.showAlert('Mood saved successfully!');
+                    //tg.showAlert('Mood saved successfully!');
                 }
             });
+            updateCalendar();
         }
 
         function showView(viewId) {
@@ -356,8 +360,6 @@
         }
 
         // Initialize
-        tg.expand();
-        tg.disableVerticalSwipes();
         document.getElementById('greeting').textContent = `HOW DO YOU FEEL, ${username}?`;
         updateMood();
         reload_moodData();
