@@ -225,6 +225,7 @@
                 if (err) {
                     tg.showAlert('Error saving mood: ' + error);
                 } else {
+                    console.log('Mood saved successfully!');
                     // if (saved) {
                     //     if (typeof DemoApp.cloudStorageItems[key] === 'undefined') {
                     //         DemoApp.cloudStorageKeys.push(key);
@@ -233,7 +234,7 @@
                     // }
                     // form.reset();
                     // DemoApp.updateCloudRows();
-                    tg.showAlert('Mood saved successfully!');
+                    //tg.showAlert('Mood saved successfully!');
                 }
             });
             showView('calendar-view');
