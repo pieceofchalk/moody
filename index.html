@@ -188,7 +188,7 @@
         function updateMainColor(color) {
             tg.setHeaderColor(color); 
             tg.setBackgroundColor(color);
-            document.body.style.backgroundColor = color;
+            document.body.style.backgroundColor = color; //TODO: fix colors
         }
 
         const username = tg.initDataUnsafe.user ? tg.initDataUnsafe.user.first_name : 'User';
