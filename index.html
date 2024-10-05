@@ -219,7 +219,7 @@
 
         function saveMood() {
             // const today = new Date().toISOString().split('T')[0];
-            // moodData[today] = currentMood;
+            moodData[today] = currentMood;
             const today = new Date().toISOString().split('T')[0];
             tg.CloudStorage.setItem(today, currentMood.toString(), function(err, saved) {
                 if (err) {
@@ -237,7 +237,6 @@
                     //tg.showAlert('Mood saved successfully!');
                 }
             });
-            updateCalendar();
             showView('calendar-view');
         }
 
