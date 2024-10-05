@@ -21,6 +21,7 @@
             flex-direction: column;
             transition: background-color 0.3s ease;
             color: white;
+            background-color: transparent;
         }
         .content {
             flex-grow: 1;
@@ -187,7 +188,7 @@
         function updateMainColor(color) {
             tg.setHeaderColor(color); 
             tg.setBackgroundColor(color);
-            document.body.style.backgroundColor = color;
+            // document.body.style.backgroundColor = color;
         }
 
         
