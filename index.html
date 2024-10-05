@@ -107,7 +107,8 @@
             background-color: #4a4a4a;
             overflow-y: auto;
             overflow-x: hidden;
-            height: calc(100vh - 50px); /* Adjust based on your footer height */
+            height: 100%;
+/*            height: calc(100vh - 50px);*/
         }
         .month-container {
             width: 100%;
@@ -181,12 +182,20 @@
         let currentMood = 0;
         let moodData = {};
         const tg = window.Telegram.WebApp;
+
+        function updateMainColor(color) {
+            document.body.style.backgroundColor = color;
+            tg.setHeaderColor(color); 
+            tg.setBackgroundColor(color);
+        }
+
+        
         tg.expand();
         tg.disableVerticalSwipes();
         const username = tg.initDataUnsafe.user ? tg.initDataUnsafe.user.first_name : 'User';
 
         function updateMood() {
-            document.body.style.backgroundColor = colors[currentMood];
+            updateMainColor(colors[currentMood]);
             document.getElementById('current_mood').className = moods_classes[currentMood];
             updateDots();
         }
@@ -234,6 +243,7 @@
             document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
             event.target.classList.add('active');
             if (viewId === 'calendar-view') updateCalendar();
+            if (viewId === 'mood-view') updateMainColor(colors[currentMood]);
         }
 
         function reload_moodData(){
@@ -259,7 +269,8 @@
         }
 
         function updateCalendar() {
-            reload_moodData()
+            updateMainColor("#4a4a4a");
+            reload_moodData();
             const calendarView = document.getElementById('calendar-view');
             calendarView.innerHTML = ''; // Clear previous calendar
 
