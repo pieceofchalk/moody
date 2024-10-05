@@ -30,7 +30,7 @@
             align-items: center;
             text-align: center;
             padding: 20px;
-            height: 100%;
+            height: var(--tg-viewport-height, 100vh) - 50px;
         }
         .selector {
             display: flex;
@@ -81,6 +81,7 @@
             display: flex;
             justify-content: space-around;
             padding: 10px;
+            height: 50px;
             /*background-color: var(--tg-theme-bg-color, #fff);
             color: var(--tg-theme-text-color, #222);*/
         }
@@ -107,7 +108,7 @@
             background-color: #4a4a4a;
             overflow-y: auto;
             overflow-x: hidden;
-            height: 100%;
+            height: height: var(--tg-viewport-height, 100vh) - 50px;
 /*            height: calc(100vh - 50px);*/
         }
         .month-container {
