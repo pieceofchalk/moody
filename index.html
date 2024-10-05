@@ -188,12 +188,9 @@
         function updateMainColor(color) {
             tg.setHeaderColor(color); 
             tg.setBackgroundColor(color);
-            // document.body.style.backgroundColor = color;
+            document.body.style.backgroundColor = color;
         }
 
-        
-        tg.expand();
-        tg.disableVerticalSwipes();
         const username = tg.initDataUnsafe.user ? tg.initDataUnsafe.user.first_name : 'User';
 
         function updateMood() {
@@ -219,7 +216,6 @@
 
         function saveMood() {
             // const today = new Date().toISOString().split('T')[0];
-            moodData[today] = currentMood;
             const today = new Date().toISOString().split('T')[0];
             tg.CloudStorage.setItem(today, currentMood.toString(), function(err, saved) {
                 if (err) {
@@ -360,6 +356,8 @@
         }
 
         // Initialize
+        tg.expand();
+        tg.disableVerticalSwipes();
         document.getElementById('greeting').textContent = `HOW DO YOU FEEL, ${username}?`;
         updateMood();
         reload_moodData();
