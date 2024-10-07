@@ -17,7 +17,7 @@
             margin: 0;
             padding: 0;
             height: 100%;
-            overflow-y: auto;
+            overflow: auto;
             height: var(--tg-viewport-height, 100vh);
             display: flex;
             box-sizing: border-box;
@@ -31,12 +31,12 @@
         }
         .content {
             flex-grow: 1;
-            display: flex;
+            display: block;
             flex-direction: column;
             justify-content: space-around;
             align-items: center;
             text-align: center;
-/*            padding: 20px;*/
+
             padding-bottom: calc(88px + var(--lvh, 100vh) - var(--tg-viewport-height, 100vh));
             height: var(--tg-viewport-stable-height, 100vh) - calc(88px + var(--lvh, 100vh) - var(--tg-viewport-height, 100vh));
 /*            pointer-events: none;*/
