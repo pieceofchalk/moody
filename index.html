@@ -443,11 +443,11 @@
 
             if (xDiff > 0) {
                 // Swipe left
-                changeMood(1)
+                changeMood(-1)
                 // currentMood = (currentMood + 1) % moods.length;
             } else {
                 // Swipe right
-                changeMood(-1)
+                changeMood(1)
                 // currentMood = (currentMood - 1 + moods.length) % moods.length;
             }
             updateMood();
