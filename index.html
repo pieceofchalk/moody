@@ -21,7 +21,7 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            height: 100vh;
+            height: var(--tg-viewport-stable-height, 100vh);
             font-smoothing: antialiased;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
@@ -44,7 +44,7 @@
             user-select: none; /* Standard syntax */*/
         }
         .page {
-            height: 100vh;
+            height: var(--tg-viewport-stable-height, 100vh);
             overflow-y: hidden;
             overflow-x: hidden;
             padding-top: 0;
@@ -87,7 +87,7 @@
             padding-left: 16px;
             padding-right: 16px;
             padding-bottom: calc(88px + var(--lvh, 100vh) - var(--tg-viewport-height, 100vh));
-            height: height: var(--tg-viewport-stable-height, 100vh) - 50px;
+            height: var(--tg-viewport-stable-height, 100vh) - 50px;
 /*            height: calc(100vh - 50px);*/
         }
         .selector {
