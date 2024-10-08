@@ -212,6 +212,19 @@
             background-color: rgba(255, 255, 255, 0.1);
             border-radius: 5px;
         }
+        .icn-spinner {
+            animation: spin-animation 2s infinite;
+            display: inline-block;
+        }
+
+        @keyframes spin-animation {
+              0% {
+                transform: rotate(0deg);
+              }
+              100% {
+                transform: rotate(359deg);
+              }
+            }
 
     </style>
 </head>
@@ -226,7 +239,11 @@
                         <div class="mood" id="mood">
                             <i id="current_mood" class="bi bi-emoji-laughing-fill"></i>
                         </div>
-                    <div class="save-button" onclick="saveMood()"><i class="bi bi-plus-lg"></i></div>
+                    <div class="save-button" onclick="saveMood()">
+                        <i id='save' class="bi bi-plus-circle"></i>
+                        <!-- <i class="bi bi-arrow-repeat"></i> -->
+                        <!-- <i class="bi bi-check-lg"></i> -->
+                    </div>
                     <div class="selector">
                         <div class="arrow arrow-left" onclick="changeMood(-1)"><i class="bi bi-chevron-compact-left"></i></div>
                         <div class="nav-dots" id="nav-dots"></div>
@@ -307,10 +324,14 @@
         function saveMood() {
             // const today = new Date().toISOString().split('T')[0];
             // moodData[today] = currentMood;
+            document.getElementById("save").classList.replace('bi-plus-circle', 'bi-arrow-repeat');
+            document.getElementById("save").classList.add('icn-spinner');
             const today = new Date().toISOString().split('T')[0];
             tg.CloudStorage.setItem(today, currentMood.toString(), function(err, saved) {
                 if (err) {
                     tg.showAlert('Error saving mood: ' + error);
+                    document.getElementById("save").classList.remove('icn-spinner');
+                    document.getElementById("save").classList.replace('bi-arrow-repeat', 'bi-x-circle');
                 } else {
                     // console.log('Mood saved successfully!');
                     // if (saved) {
@@ -321,7 +342,12 @@
                     // }
                     // form.reset();
                     // DemoApp.updateCloudRows();
-                    tg.showAlert('Mood saved successfully!');
+                    // tg.showAlert('Mood saved successfully!');
+                    document.getElementById("save").classList.remove('icn-spinner');
+                    setTimeout(function () {
+                        document.getElementById("save").classList.replace('bi-arrow-repeat', 'bi-check-circle');
+                    }, 5000);
+                    document.getElementById("save").classList.replace('bi-check-circle', 'bi-plus-circle');
                 }
             });
             reload_moodData();
