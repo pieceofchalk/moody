@@ -345,11 +345,11 @@
                     // tg.showAlert('Mood saved successfully!');
                     setTimeout(function () {
                         document.getElementById("save").classList.remove('icn-spinner');
+                        document.getElementById("save").classList.replace('bi-arrow-repeat', 'bi-check-lg');
                     }, 2000);
-                    document.getElementById("save").classList.replace('bi-arrow-repeat', 'bi-check-lg');
                     setTimeout(function () {
                         document.getElementById("save").classList.replace('bi-check-lg', 'bi-plus-lg');
-                    }, 2000);
+                    }, 3500);
                     
                 }
             });
