@@ -343,8 +343,8 @@
                     // form.reset();
                     // DemoApp.updateCloudRows();
                     // tg.showAlert('Mood saved successfully!');
-                    document.getElementById("save").classList.remove('icn-spinner');
                     setTimeout(function () {
+                        document.getElementById("save").classList.remove('icn-spinner');
                         document.getElementById("save").classList.replace('bi-arrow-repeat', 'bi-check-circle');
                     }, 5000);
                     document.getElementById("save").classList.replace('bi-check-circle', 'bi-plus-circle');
