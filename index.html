@@ -346,10 +346,11 @@
                     setTimeout(function () {
                         document.getElementById("save").classList.remove('icn-spinner');
                     }, 2000);
+                    document.getElementById("save").classList.replace('bi-arrow-repeat', 'bi-check-lg');
                     setTimeout(function () {
-                        document.getElementById("save").classList.replace('bi-arrow-repeat', 'bi-check-lg');
+                        document.getElementById("save").classList.replace('bi-check-lg', 'bi-plus-lg');
                     }, 2000);
-                    document.getElementById("save").classList.replace('bi-check-lg', 'bi-plus-lg');
+                    
                 }
             });
             reload_moodData();
